@@ -1,16 +1,20 @@
 (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 'use strict';
 
-var tasks = [{ id: 25456, task: "Test task for this", done: false }];
-
-window.addEventListener('load', loadTasks);
-
+// default base blocks
 var input = document.querySelector('input');
 var btn = document.querySelector('button');
 var box = document.querySelector('.box');
 
-btn.addEventListener('click', addTask);
+// default task array
+var tasks = [];
 
+//add events to button 
+btn.addEventListener('click', addTask);
+// load tasks from localstorage
+window.addEventListener('load', loadTasks);
+
+// generate unic id for every task
 function makeid() {
     var text = "";
     var possible = "0123456789";
@@ -20,7 +24,7 @@ function makeid() {
 }
 
 function saveTasks() {
-    localStorage.clear();
+    localStorage.clear(); // clean storage before save info
     var STORE = JSON.stringify(tasks);
     try {
         localStorage.setItem("tasksList", STORE);
@@ -36,8 +40,7 @@ function loadTasks() {
 }
 
 function render() {
-
-    // обнуляем содержимое блока
+    // clear parent block for render new data
     box.innerHTML = '';
     tasks.forEach(function (element) {
         var task = document.createElement('div');
@@ -51,42 +54,38 @@ function render() {
         task.innerHTML = '<input type="checkbox" ' + task_status + '><p>' + element['task'] + '</p><i>X</i>';
         box.appendChild(task);
     });
-
+    // set listener to every element
     var list = document.querySelectorAll('.task');
     list.forEach(function (element) {
         element.addEventListener('click', setCheckTask);
         element.childNodes[2].addEventListener('click', deleteTask);
     });
-
     saveTasks();
 };
 
 function addTask() {
-    if (input.value === '') input.value = 'new task # ' + (tasks.length + 1);
-
+    if (input.value === '') input.value = 'new task...';
     tasks.push({
         id: makeid(),
         task: input.value,
         done: false
     });
-
     render();
-    input.value = '';
+    input.value = ''; // clear input 
 };
 
 function deleteTask(e) {
-
     tasks = tasks.filter(function (element) {
         return element['id'] !== e.target.parentNode.dataset.key;
     });
-    console.log(tasks);
     render();
 };
 
 function setCheckTask() {
     var _this = this;
 
-    // если ключ совпадает, то ставим статус таска - готов, иначе убираем его
+    // if key === task key -> set checked status to task and set a class, 
+    // else remove status and class
     if (this.childNodes[0].checked) {
         this.classList.add('complete');
         tasks.forEach(function (element, index) {
