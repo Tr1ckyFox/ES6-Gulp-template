@@ -1,4 +1,6 @@
 ### Simple tasks 
 
-Простая TODO на ES6 + localstorage;
-> Simple TODO via ES6 and localstorage
+Простой шаблон gulp для использования с ES6.
+
+> Simple Gulp ES6 template
+> type - __npm install__ to install all dependences
