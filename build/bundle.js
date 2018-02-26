@@ -31,13 +31,17 @@ function saveTasks() {
     } catch (err) {
         console.log(err);
     }
-}
+};
 
 function loadTasks() {
     var tasksStore = JSON.parse(localStorage.getItem("tasksList"));
-    tasks = tasksStore;
+    tasksStore ? tasks = tasksStore : tasks.push({
+        id: makeid(),
+        task: 'Learn JS...',
+        done: false
+    });
     render();
-}
+};
 
 function render() {
     // clear parent block for render new data
@@ -65,12 +69,14 @@ function render() {
 
 function addTask() {
     if (input.value === '') input.value = 'new task...';
+
     tasks.push({
         id: makeid(),
         task: input.value,
         done: false
     });
     render();
+    console.log(tasks);
     input.value = ''; // clear input 
 };
 
